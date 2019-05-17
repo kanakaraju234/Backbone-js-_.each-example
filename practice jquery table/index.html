@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>TODO list</title>
+    <link rel="stylesheet" href="/bootstrap-4/css/bootstrap.min.css" >
+
+
+   
+   
+</head>
+<body>
+   <table class="table">
+       <thead>
+    <tr>
+       <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Stock</th>
+       </tr>
+        </thead>
+       
+       <tbody id="table-body">
+          
+        </tbody>
+    </table> 
+  <script type="text/template" id="surfboard-template">
+   <td><%= manufacturer %></td>
+  <td><%= model %></td>
+  <td><%= stock %></td>
+    </script>
+    
+    <script src="jquery.js"></script>
+    <script src="underscore.js"></script>
+    <script src="Backbone.js"></script>
+    
+    <script src="jquery-ui/jquery-ui.js"></script>
+   
+   
+    
+    <script>
+var Surfboard =Backbone.Model.extend({
+    defaults:{
+        manufacturer:'',
+        model:"",
+        stock:0
+    }
+});
+var board1 = new Surfboard({
+            manufacturer:'channel Islands',
+            model:'whip',
+            stock:12
+        });
+        var board2 = new Surfboard({
+            manufacturer:'channel Islands',
+            model:'whip',
+            stock:12
+        });
+        var board3 = new Surfboard({
+            manufacturer:'channel Islands',
+            model:'whip',
+            stock:12
+        });
+        
+ var SurfboardsCollection = Backbone.Collection.extend({
+model:Surfboard
+});    
+ 
+var Surfboards = new SurfboardsCollection;
+Surfboards.add(board1);
+Surfboards.add(board2);
+Surfboards.add(board3);
+ 
+     
+  var SurfboardView = Backbone.View.extend({
+
+  tagName: 'tr',
+
+  template : _.template($('#surfboard-template').html()),
+
+  render: function() {
+    this.$el.html(this.template(this.model.attributes));
+    return this;
+  }
+
+});
+        
+var SurfboardsView = Backbone.View.extend({
+    
+  el: '#table-body',
+
+  initialize: function() {
+      this.render();
+  },
+
+  render: function() {
+      var self= this;
+  this.$el.html('');
+
+  Surfboards.each(function(model) {
+    var surfboard = new SurfboardView({
+      model: model
+    });
+
+    self.$el.append(surfboard.render().el);
+  });
+
+  return this;
+}
+
+});
+        var app = new SurfboardsView;
+    </script> 
+    
+    
+    
+    
+    
+   
+</body>
+    
+</html>
